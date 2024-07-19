@@ -17,50 +17,108 @@
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css"
     />
     <link rel="stylesheet" href="style.css" />
+    <style>
+      .bi {
+        font-size: 1.5em;
+      }
+    </style>
   </head>
   <body>
-    <header class="mb-5">
-      <nav class="navbar bg-primary">
-        <div class="container">
-          <button class="btn">
+    <!-- PROJECTS SIDEBAR -->
+    <div
+      class="d-flex flex-column gap-3 position-fixed text-bg-dark vh-100 z-3 px-3 js-project-sidebar"
+      data-toggled="false"
+    >
+      <button class="btn text-white js-project-sidebar-close-btn">
+        <i class="bi bi-x"></i>
+      </button>
+      <h2 class="h2 text-center text-uppercase js-project-indicator--btn">
+        PROJECTS
+      </h2>
+      <div
+        class="list-group list-group-flush gap-3 text-center js-projects-display"
+      >
+        <button
+          type="button"
+          class="list-group-item list-group-item-action text-bg-dark"
+        >
+          The current button
+        </button>
+        <button
+          type="button"
+          class="list-group-item list-group-item-action text-bg-dark"
+        >
+          The current button
+        </button>
+      </div>
+    </div>
+    <header class="mb-5 js-header">
+      <nav class="navbar text-bg-secondary">
+        <!-- Just Todo It logo and Github link -->
+        <div class="container mb-1">
+          <button class="btn js-project-toggle" data-toggled="false">
             <i class="bi bi-stack"></i>
           </button>
-          <span class="navbar-brand mb-0 h1">Navbar</span>
+          <h1 class="display-2 mb-0">JUST TODO IT</h1>
           <button class="btn">
             <i class="bi bi-github"></i>
           </button>
         </div>
+        <!-- Search and Add todo or project -->
         <div class="container d-lg-flex justify-content-center">
-          <div class="d-flex">
-            <button class="btn">
-              <i class="bi bi-file-earmark-plus"></i>
+          <div class="d-flex gap-2">
+            <button class="btn js-add-project-btn">
+              Add Project <i class="bi bi-file-earmark-plus"></i>
             </button>
-            <div class="position-relative d-flex">
+            <div class="position-relative d-flex js-search-input">
               <input
                 type="text"
                 name="search"
                 id="search"
                 placeholder="Search...."
                 class="input-group-text"
-                style="padding-right: 30px"
+                style="padding-right: 40px"
               />
-              <button class="btn position-absolute end-0">
+              <button
+                class="btn position-absolute end-0 text-dark border-0 fw-bold js-search-btn"
+              >
                 <i class="bi bi-search"></i>
               </button>
             </div>
-            <button class="btn">
-              <i class="bi bi-plus"></i>
+            <button class="btn js-add-todo-btn">
+              <i class="bi bi-plus"></i> Add Todo
             </button>
           </div>
         </div>
       </nav>
     </header>
-    <main>
+    <main class="js-main">
       <div class="container-fluid bg-body-tertiary py-3 pt-5">
-        <h2 class="h2">ALL TODO ITEMS</h2>
-        <div class="row mx-0 px-1 pt-5 justify-content-start row-gap-3">
+        <div
+          class="container-fluid d-flex text-bg-dark justify-content-between"
+        >
+          <h2 class="h2 js-display-indicator">ALL TODO ITEMS</h2>
+          <button class="btn text-white js-filter-display">
+            <i class="bi bi-filter"></i>
+          </button>
+        </div>
+        <div
+          class="row mx-0 px-1 pt-5 justify-content-start row-gap-3 js-all-cards-display"
+        >
+          <!-- TABLET ABOVE CARD DESIGN -->
           <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-            <div class="card mx-auto mx-md-0" style="width: 16rem">
+            <div class="card mx-auto mx-md-0 shadow-lg" style="width: 16rem">
+              <input
+                type="checkbox"
+                name="taskDone"
+                id="taskDone"
+                style="
+                  position: absolute;
+                  right: 10px;
+                  top: 10px;
+                  transform: scale(1.5);
+                "
+              />
               <img
                 src="stockImage.jpg"
                 class="card-img-top"
@@ -68,9 +126,10 @@
               />
               <div class="card-body position-relative">
                 <h5 class="card-title">Card title</h5>
-                <p class="fst-italic card-text">
+                <p class="fst-italic card-text mb-0">
                   EXPIRY DATE: <span>2024</span>
                 </p>
+                <span class="text-info">Project Assigned to: </span>
                 <!-- <p class="card-text">
                   Some quick example text to build on the card title and make up
                   the bulk of the card's content.
@@ -85,106 +144,62 @@
               </div>
             </div>
           </div>
+          <!-- TABLET BELOW CARD DESIGN -->
           <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-            <div class="card mx-auto" style="width: 16rem">
-              <img
-                src="stockImage.jpg"
-                class="card-img-top"
-                alt="Todo Item Image"
+            <div class="card mx-auto" style="width: 100%">
+              <input
+                type="checkbox"
+                name="taskDone"
+                id="taskDone"
+                style="
+                  position: absolute;
+                  right: 10px;
+                  top: 10px;
+                  transform: scale(1.5);
+                "
               />
-              <div class="card-body">
+
+              <div
+                class="card-body"
+                style="
+                  background: url(stockImage.jpg);
+                  color: white;
+                  background-size: cover;
+                  background-repeat: no-repeat;
+                "
+              >
                 <h5 class="card-title">Card title</h5>
-                <p class="fst-italic card-text">
+                <p class="fst-italic card-text mb-0">
                   EXPIRY DATE: <span>2024</span>
                 </p>
+                <span class="text-info">Project Assigned to: </span>
                 <!-- <p class="card-text">
                   Some quick example text to build on the card title and make up
                   the bulk of the card's content.
                 </p> -->
                 <div class="badge"></div>
               </div>
-              <div class="card-footer">
+              <div
+                class="card-footer d-flex w-100 align-items-center justify-content-between"
+              >
                 <button class="btn btn-outline-dark">DESCRIPTION</button>
-              </div>
-            </div>
-          </div>
-          <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-            <div class="card mx-auto" style="width: 16rem">
-              <img
-                src="stockImage.jpg"
-                class="card-img-top"
-                alt="Todo Item Image"
-              />
-              <div class="card-body">
-                <h5 class="card-title">Card title</h5>
-                <p class="fst-italic card-text">
-                  EXPIRY DATE: <span>2024</span>
-                </p>
-                <!-- <p class="card-text">
-                  Some quick example text to build on the card title and make up
-                  the bulk of the card's content.
-                </p> -->
-                <div class="badge"></div>
-              </div>
-              <div class="card-footer">
-                <button class="btn btn-outline-dark">DESCRIPTION</button>
-              </div>
-            </div>
-          </div>
-          <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-            <div class="card mx-auto" style="width: 16rem">
-              <img
-                src="stockImage.jpg"
-                class="card-img-top"
-                alt="Todo Item Image"
-              />
-              <div class="card-body">
-                <h5 class="card-title">Card title</h5>
-                <p class="fst-italic card-text">
-                  EXPIRY DATE: <span>2024</span>
-                </p>
-                <!-- <p class="card-text">
-                  Some quick example text to build on the card title and make up
-                  the bulk of the card's content.
-                </p> -->
-                <div class="badge"></div>
-              </div>
-              <div class="card-footer">
-                <button class="btn btn-outline-dark">DESCRIPTION</button>
-              </div>
-            </div>
-          </div>
-          <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-            <div class="card mx-auto" style="width: 16rem">
-              <img
-                src="stockImage.jpg"
-                class="card-img-top"
-                alt="Todo Item Image"
-              />
-              <div class="card-body">
-                <h5 class="card-title">Card title</h5>
-                <p class="fst-italic card-text">
-                  EXPIRY DATE: <span>2024</span>
-                </p>
-                <!-- <p class="card-text">
-                  Some quick example text to build on the card title and make up
-                  the bulk of the card's content.
-                </p> -->
-                <div class="badge"></div>
-              </div>
-              <div class="card-footer">
-                <button class="btn btn-outline-dark">DESCRIPTION</button>
+                <span
+                  class="badge text-bg-secondary float-end align-items-center"
+                  >RED</span
+                >
               </div>
             </div>
           </div>
         </div>
       </div>
     </main>
+    <footer></footer>
 
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
       crossorigin="anonymous"
     ></script>
+    <script src="main.js" type="module"></script>
   </body>
 </html>
