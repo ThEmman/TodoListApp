@@ -24,6 +24,43 @@
     </style>
   </head>
   <body>
+    <!-- FORM FOR ADDING NEW TODO -->
+    <dialog id="dialog">
+      <form>
+        <div class="mb-3">
+          <label for="exampleInputEmail1" class="form-label"
+            >Email address</label
+          >
+          <input
+            type="email"
+            class="form-control"
+            id="exampleInputEmail1"
+            aria-describedby="emailHelp"
+          />
+        </div>
+        <div class="mb-3">
+          <label for="exampleInputPassword1" class="form-label">Password</label>
+          <input
+            type="password"
+            class="form-control"
+            id="exampleInputPassword1"
+          />
+        </div>
+        <div class="mb-3 form-check">
+          <input type="checkbox" class="form-check-input" id="exampleCheck1" />
+          <label class="form-check-label" for="exampleCheck1"
+            >Check me out</label
+          >
+        </div>
+        <button class="btn btn-primary" value="close" id="js-close">
+          Close
+        </button>
+        <button type="submit" class="btn btn-primary" id="js-submit">
+          Submit
+        </button>
+      </form>
+    </dialog>
+
     <!-- PROJECTS SIDEBAR -->
     <div
       class="d-flex flex-column gap-3 position-fixed text-bg-dark vh-100 z-3 px-3 js-project-sidebar"
@@ -61,7 +98,13 @@
           </button>
           <h1 class="display-2 mb-0">JUST TODO IT</h1>
           <button class="btn">
-            <i class="bi bi-github"></i>
+            <a
+              href="https://www.github.com/ThEmman"
+              style="color: inherit"
+              target="_blank"
+            >
+              <i class="bi bi-github"></i>
+            </a>
           </button>
         </div>
         <!-- Search and Add todo or project -->
@@ -85,7 +128,7 @@
                 <i class="bi bi-search"></i>
               </button>
             </div>
-            <button class="btn js-add-todo-btn">
+            <button class="btn js-add-todo-btn" id="show-dialog">
               <i class="bi bi-plus"></i> Add Todo
             </button>
           </div>

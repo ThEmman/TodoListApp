@@ -75,6 +75,9 @@ function createTodoItem(
   return newTodo;
 }
 
+createTodoItem("Harry Potter", "This is a description", "2005/02/21", "normal");
+createTodoItem("Harry Potter", "This is a description", "2005/02/21", "normal");
+
 function deleteTodoItem(todoItem) {
   if (!projectUtilities.validateParameter(todoItem, "object")) return;
 
@@ -127,4 +130,4 @@ const todoFunctions = {
   removeTodoItemFromProject,
 };
 
-export default todoFunctions;
+export { allTodoList, todoFunctions };

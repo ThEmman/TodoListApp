@@ -1,11 +1,17 @@
+import projectUtilities from "./utilities.js";
+import { allTodoList } from "./todoControllers.js";
+
 const allProjects = {}; // List for all projects / subdivision of todo's.
+
+const defaultProjectName = "default project";
 
 function projectCategory(name, todoList) {
   this.name = name;
   this.todoList = todoList;
+  this.state = false;
 
   this.addTodoItemToProject = function (todoItem) {
-    if (!validateParameter(todoItem, "object")) return; // Validate todoItem object
+    if (!projectUtilities.validateParameter(todoItem, "object")) return; // Validate todoItem object
 
     // Check if todo item already exists in the project
     if (this.todoList.includes(todoItem)) {
@@ -28,7 +34,7 @@ function projectCategory(name, todoList) {
 }
 
 function addToAllProjectsList(newProject) {
-  if (!validateParameter(newProject, "object")) return; // Validate project object
+  if (!projectUtilities.validateParameter(newProject, "object")) return; // Validate project object
 
   allProjects[newProject.name] = newProject;
 }
@@ -44,6 +50,9 @@ function createProject(name = defaultProjectName, todoList = []) {
   addToAllProjectsList(newProject); //
   return newProject;
 }
+
+// Create a default project with all todo's
+createProject(defaultProjectName, allTodoList);
 
 const projectFunctions = {
   createProject,

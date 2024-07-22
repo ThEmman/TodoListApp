@@ -1,4 +1,5 @@
-import { createCard } from "./todoItemModel";
+import { createCard } from "./todoItemModel.js";
+import createProjectBtn from "./projectHtmlModel.js";
 
 // HOLDS ALL CLICK FUNCTIONS TO BE ADDED TO HTML ELEMENTS
 
@@ -20,10 +21,8 @@ function searchTodo(event, allProjects, allTodo) {
 
 function renderTodoList(listOfTodo, windowWidth) {
   // Clear previous todo list
-  const displayContainer = document.getElementById("display_indicator");
+  const displayContainer = document.querySelector(".js-all-cards-display");
   displayContainer.innerHTML = "";
-
-  displayContainer.insertAdjacentHTML("beforeend");
 
   let todoHTML = "";
 
@@ -31,32 +30,57 @@ function renderTodoList(listOfTodo, windowWidth) {
   listOfTodo.forEach((todo) => {
     todoHTML += createCard(todo, windowWidth) + "\n";
   });
+
+  displayContainer.insertAdjacentHTML("beforeend", todoHTML);
 }
 
-function renderProjectTodoList(event, windowWidth) {
-  const projectName = event.target.innerText;
+function renderProjectTodoList(
+  event,
+  allProjects,
+  projectName = "",
+  windowWidth
+) {
+  projectName = projectName != "" ? projectName : event.target.innerText;
+
+  const displayContainer = document.querySelector(".js-display-indicator");
+  displayContainer.innerText = "";
 
   // Filter project list for selected project
-  const selectedProject = allProjects.find(
-    (project) => project.name.toLowerCase() === projectName.toLowerCase()
-  );
+  let selectedProject = {};
 
-  // Clear previous todo list
-  const displayContainer = document.getElementById("display_indicator");
-  displayContainer.innerHTML = "";
+  for (let project in allProjects) {
+    if (allProjects[project].name.toLowerCase() === projectName.toLowerCase()) {
+      selectedProject = allProjects[project];
+    }
+  }
 
   renderTodoList(selectedProject.todoList, windowWidth);
+
+  // Update display indicator
+  displayContainer.innerText = `Todo for ${projectName}`;
 }
 
 //! ON PAGE LOADED FUNCTIONS
 
-function renderProjectSidesBar(allProjects){
+function renderProjectSidesBar(allProjects = {}) {
   // Clear previous projects list
-  const projectBar = document.getElementById("project_bar");
+  const projectBar = document.querySelector(".js-projects-display");
   projectBar.innerHTML = "";
-  
-  // Loop through each project and create HTML for it
-  allProjects.forEach((project) => {
-    projectBar.insertAdjacentHTML("beforeend", `${createProjectBtn()}`);
-  });
+  let allProjectString = "";
+
+  // Loop through each project and create HTML for i
+  for (const project in allProjects) {
+    allProjectString += createProjectBtn(allProjects[project]);
+  }
+
+  projectBar.insertAdjacentHTML("beforeend", allProjectString);
 }
+
+const htmlFunctions = {
+  searchTodo,
+  renderTodoList,
+  renderProjectTodoList,
+  renderProjectSidesBar,
+};
+
+export default htmlFunctions;

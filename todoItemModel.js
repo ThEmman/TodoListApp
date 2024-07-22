@@ -1,9 +1,9 @@
 function createCard(
-  {id, title, dueDate, description, priority, projectAssignedTo },
+  { id, title, dueDate, description, priority, projectAssignedTo },
   windowSize
 ) {
   const Card =
-    windowSize >= "576"
+    windowSize >= 576
       ? `          <div class="col-12 col-sm-6 col-md-4 col-lg-3" data-id=${id}>
             <div class="card mx-auto mx-md-0" style="width: 16rem">
               <input
@@ -90,4 +90,4 @@ function createCard(
   return Card;
 }
 
-export { createCard};
+export { createCard };

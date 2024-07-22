@@ -8,3 +8,5 @@ function createProjectBtn(projectObject) {
 
   return project;
 }
+
+export default createProjectBtn;
