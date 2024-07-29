@@ -19,43 +19,160 @@
     <link rel="stylesheet" href="style.css" />
     <style>
       .bi {
-        font-size: 1.5em;
+        font-size: 1.6em;
       }
     </style>
   </head>
   <body>
-    <!-- FORM FOR ADDING NEW TODO -->
-    <dialog id="dialog">
+    <!-- FORM DIALOG FOR ADDING NEW TODO -->
+    <dialog id="todo-dialog" class="border-1 rounded">
+      <span class="display-3 text-center d-block mb-3">ADD TODO ITEM</span>
       <form>
-        <div class="mb-3">
-          <label for="exampleInputEmail1" class="form-label"
-            >Email address</label
-          >
+        <div class="form-floating mb-3">
           <input
-            type="email"
+            type="text"
             class="form-control"
-            id="exampleInputEmail1"
-            aria-describedby="emailHelp"
+            id="todo_title"
+            name="title"
+            minlength="6"
+            maxlength="12"
           />
+          <label for="todo_title" class="form-label fw-bold">Todo Title</label>
+          <p id="titleError" class="inputError"></p>
+        </div>
+        <div class="form-floating mb-3">
+          <textarea
+            class="form-control"
+            id="todo_description"
+            style="min-height: 100px; max-height: 125px"
+            name="description"
+            minlength="10"
+            maxlength="200"
+          ></textarea>
+          <label for="todo_description" class="form-label fw-bold"
+            >Description</label
+          >
+          <p id="descriptionError" class="inputError"></p>
         </div>
         <div class="mb-3">
-          <label for="exampleInputPassword1" class="form-label">Password</label>
+          <label for="due_date" class="form-label fw-bold">Due Date: </label>
           <input
-            type="password"
-            class="form-control"
-            id="exampleInputPassword1"
+            class="form-control-sm"
+            type="date"
+            id="due_date"
+            name="dueDate"
+            value="2024-07-22"
+            min="2018-01-01"
+            max="2018-12-31"
           />
+          <!-- JS injected current date and one hour ahead time will be accounted for -->
+          <input type="time" id="due_date_time" />
+          <p id="dueDateError" class="inputError"></p>
         </div>
-        <div class="mb-3 form-check">
-          <input type="checkbox" class="form-check-input" id="exampleCheck1" />
-          <label class="form-check-label" for="exampleCheck1"
-            >Check me out</label
+        <div class="mb-3 d-flex">
+          <div class="form-check">
+            <input
+              type="radio"
+              class="btn-check"
+              name="priority"
+              id="low_priority"
+              data-priority="low"
+              required
+            />
+            <label class="btn btn-outline-info" for="low_priority">Low</label>
+          </div>
+          <div class="form-check">
+            <input
+              type="radio"
+              class="btn-check"
+              name="priority"
+              id="normal_priority"
+              data-priority="normal"
+              required
+            />
+            <label class="btn btn-outline-success" for="normal_priority"
+              >Normal</label
+            >
+          </div>
+          <div class="form-check">
+            <input
+              type="radio"
+              class="btn-check"
+              name="priority"
+              id="high_priority"
+              data-priority="high"
+              required
+            />
+            <label class="btn btn-outline-warning" for="high_priority"
+              >High</label
+            >
+          </div>
+          <div class="form-check">
+            <input
+              type="radio"
+              class="btn-check"
+              name="priority"
+              id="urgent_priority"
+              data-priority="urgent"
+              required
+            />
+            <label class="btn btn-outline-danger" for="urgent_priority"
+              >Urgent</label
+            >
+          </div>
+        </div>
+        <p id="priorityError" class="inputError"></p>
+
+        <div class="mb-4">
+          <select
+            class="form-select form-select-sm"
+            id="project_selection"
+            aria-label="Small select example"
           >
+            <option selected value="default Project">
+              Select Project to Assign to:
+            </option>
+            <option value="1">One</option>
+            <!--JS generated list of projects-->
+            <option value="2">Two</option>
+            <option value="3">Three</option>
+          </select>
+          <p id="projectAssignedError" class="inputError text-warning"></p>
         </div>
-        <button class="btn btn-primary" value="close" id="js-close">
+        <button class="btn btn-primary" value="close" id="todo-close">
           Close
         </button>
-        <button type="submit" class="btn btn-primary" id="js-submit">
+        <button type="submit" class="btn btn-primary" id="todo-submit">
+          <!-- id="js-submit" -->
+          Submit
+        </button>
+      </form>
+    </dialog>
+
+    <!-- FORM DIALOG FOR ADDING NEW PROJECT -->
+    <dialog id="project-dialog" class="border-1 rounded">
+      <span class="display-3 text-center d-block mb-3">ADD PROJECT</span>
+      <form>
+        <div class="form-floating mb-3">
+          <input
+            type="text"
+            class="form-control"
+            id="project_name"
+            name="name"
+            minlength="6"
+            maxlength="12"
+          />
+          <label for="project_name" class="form-label fw-bold"
+            >Project Name</label
+          >
+          <p id="projectNameError" class="projectInputError"></p>
+        </div>
+
+        <button class="btn btn-primary" value="close" id="project-close">
+          Close
+        </button>
+        <button type="submit" class="btn btn-primary" id="project-submit">
+          <!-- id="js-submit" -->
           Submit
         </button>
       </form>
@@ -63,7 +180,7 @@
 
     <!-- PROJECTS SIDEBAR -->
     <div
-      class="d-flex flex-column gap-3 position-fixed text-bg-dark vh-100 z-3 px-3 js-project-sidebar"
+      class="d-flex flex-column gap-3 position-fixed text-bg-dark vh-100 z-3 px-3 d-none js-project-sidebar"
       data-toggled="false"
     >
       <button class="btn text-white js-project-sidebar-close-btn">
@@ -110,7 +227,7 @@
         <!-- Search and Add todo or project -->
         <div class="container d-lg-flex justify-content-center">
           <div class="d-flex gap-2">
-            <button class="btn js-add-project-btn">
+            <button class="btn js-project-btn" id="show-project-dialog">
               Add Project <i class="bi bi-file-earmark-plus"></i>
             </button>
             <div class="position-relative d-flex js-search-input">
@@ -128,7 +245,7 @@
                 <i class="bi bi-search"></i>
               </button>
             </div>
-            <button class="btn js-add-todo-btn" id="show-dialog">
+            <button class="btn js-todo-btn" id="show-todo-dialog">
               <i class="bi bi-plus"></i> Add Todo
             </button>
           </div>

@@ -79,6 +79,21 @@ window.addEventListener("DOMContentLoaded", function () {
     currentProjectDisplayed,
     578
   );
+
+  // Toggle function for radio buttons in html
+  const priority = document.querySelectorAll("input[name=priority]");
+
+  for (let radio of priority) {
+    radio.addEventListener("click", function () {
+      for (let otherRadio of priority) {
+        otherRadio.classList.remove("on");
+      }
+
+      radio.classList.toggle("on");
+    });
+  }
+
+  // Add projects to the todo list forms
 });
 
 /* const breakPoint = 576;
@@ -93,30 +108,186 @@ window.addEventListener("resize", function (e) {
   }
 }); */
 
-//TODO: FORM CONTROL FOR MODAL DIALOG BOX
-const showBtn = document.getElementById("show-dialog");
-const dialog = document.getElementById("dialog");
-const form = dialog.firstElementChild;
-const jsCloseBtn = dialog.querySelector("#js-close");
-const jsSubmitBtn = dialog.querySelector("#js-submit");
+//TODO: FORM CONTROL FOR TODO DIALOG BOX
+const todoDialog = document.getElementById("todo-dialog");
+const todoForm = todoDialog.getElementsByTagName("form")[0];
 
-showBtn.addEventListener("click", () => {
-  dialog.showModal();
+// \TODO dialog controls and event handlers
+const todoShowBtn = document.getElementById("show-todo-dialog");
+const todoCloseBtn = todoDialog.querySelector("#todo-close");
+const todoSubmitBtn = todoDialog.querySelector("#todo-submit");
+
+todoShowBtn.addEventListener("click", () => {
+  todoDialog.showModal();
 });
 
-jsCloseBtn.addEventListener("click", (e) => {
+todoCloseBtn.addEventListener("click", (e) => {
   e.preventDefault();
-  form.reset();
-  dialog.close();
+  document
+    .querySelectorAll("p[class=inputError]")
+    .forEach((indicator) => (indicator.textContent = ""));
+
+  todoForm.reset;
+  todoDialog.close();
 });
 
-// TODO: CHECKPOINT...
-jsSubmitBtn.addEventListener("click", (e) => {
+todoSubmitBtn.addEventListener("click", (e) => {
   e.preventDefault();
 
-  const formData = new FormData(form).entries(); // Array of key/value pairs for each form input in dialog box
+  let isValid = true;
 
-  console.log(formData);
+  document
+    .querySelectorAll("p[class=inputError]")
+    .forEach((indicator) => (indicator.textContent = ""));
 
-  dialog.close();
+  const title = document.getElementById("todo_title");
+  const description = document.getElementById("todo_description");
+  const date = document.getElementById("due_date"); // Returns year-month-date // Min date is always todays date // Default date is always today
+  const time = document.getElementById("due_date_time"); // Returns time due to the set date; // Default time is always one hour ahead
+  let priorityValue = undefined;
+  document.querySelectorAll(".btn-check").forEach((checkBtn) => {
+    if (checkBtn.classList.contains("on")) {
+      priorityValue = checkBtn.dataset.priority;
+    }
+  }); // Return null if no priority selected
+  const projectAssignedTo = document.getElementById("project_selection"); // Returns "" if no project assigned to selected
+
+  // Validate title
+  let titleValue = title.value;
+  if (
+    titleValue.trim() === "" ||
+    (titleValue.length < title.minLength && titleValue.length > title.maxLength)
+  ) {
+    document.getElementById("titleError").textContent =
+      "Title is required and must be at least 6 characters but not more than 12 character";
+    isValid = false;
+  }
+
+  // Validate description
+  let descriptionValue = description.value;
+  if (
+    descriptionValue.trim() === "" ||
+    (descriptionValue.length < description.minLength &&
+      descriptionValue.length > description.maxLength)
+  ) {
+    document.getElementById("descriptionError").textContent =
+      "Description is required and must be at least 10 characters but not more than 150 character";
+    isValid = false;
+  }
+
+  // Validate due date and time
+  const dateValue = date.value;
+  const timeValue = time.value;
+  const dueDate = `${dateValue} ${timeValue}`;
+
+  // Validate Priority
+  if (!priorityValue) {
+    document.getElementById("priorityError").textContent =
+      "Priority is required";
+    isValid = false;
+  }
+
+  // If the form is not valid don't submit it
+  if (!isValid) return;
+
+  todoForm.reset(); // Reset form input fields
+  todoDialog.close(); // Close dialog
 });
+
+//! \PROJECT dialog controls and event handlers
+const projectDialog = document.getElementById("project-dialog");
+const projectForm = projectDialog.getElementsByTagName("form")[0];
+
+const projectShowBtn = document.getElementById("show-project-dialog");
+const projectCloseBtn = projectDialog.querySelector("#project-close");
+const projectSubmitBtn = projectDialog.querySelector("#project-submit");
+
+projectShowBtn.addEventListener("click", () => {
+  projectDialog.showModal();
+});
+
+projectCloseBtn.addEventListener("click", (e) => {
+  e.preventDefault();
+
+  document
+    .querySelectorAll("p[class=projectInputError]")
+    .forEach((indicator) => (indicator.textContent = ""));
+
+  projectForm.reset();
+  projectDialog.close();
+});
+
+projectSubmitBtn.addEventListener("click", (e) => {
+  e.preventDefault();
+  let isValid = true;
+
+  const name = document.getElementById("project_name");
+  const projectName = name.value;
+
+  if (
+    projectName.trim() === "" ||
+    (projectName.length < name.minLength && projectName.length > name.maxLength)
+  ) {
+    document.getElementById("projectNameError").textContent =
+      "Name is required";
+    isValid = false;
+  }
+
+  // Check if form is valid
+  if (!isValid) return;
+
+  projectForm.reset(); // Reset form input fields
+  projectDialog.close(); // Close dialog
+});
+
+// TODO: Work on way to do form validation with e.preventDefault
+
+/*
+ // Perform validation
+            let isValid = true;
+
+            // Validate name
+            const title = document.getElementById('name').value;
+            if (name.trim() === '') {
+                document.getElementById('nameError').textContent = 'Name is required.';
+                isValid = false;
+            }
+
+            // Validate email
+            const description = document.getElementById('email').value;
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailPattern.test(email)) {
+                document.getElementById('emailError').textContent = 'Invalid email address.';
+                isValid = false;
+            }
+
+            // Validate age
+            const date = document.getElementById('age').value;
+            if (age < 18 || age > 100) {
+                document.getElementById('ageError').textContent = 'Age must be between 18 and 100.';
+                isValid = false;
+            }
+
+            // Priority
+            const priority = document.getElementById('age').value;
+            if (age < 18 || age > 100) {
+                document.getElementById('ageError').textContent = 'Age must be between 18 and 100.';
+                isValid = false;
+            }
+
+            // Project Assigned To
+            const projectAssignedTo = document.getElementById('age').value;
+            if (age < 18 || age > 100) {
+                document.getElementById('ageError').textContent = 'Age must be between 18 and 100.';
+                isValid = false;
+            }
+
+            // If the form is valid, submit it
+            if (isValid) {
+                // Perform form submission (uncomment below line to actually submit)
+                // event.target.submit();
+
+                // For demonstration, show an alert
+                alert('Form is valid and ready to be submitted!');
+            } 
+ */
