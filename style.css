@@ -2,3 +2,33 @@
 .projectInputError {
   color: red;
 }
+
+.card[date-priority="low"] {
+  .badge {
+    background-color: black;
+    color: lightskyblue;
+  }
+}
+.card[date-priority="normal"] {
+  .badge {
+    background-color: black;
+    color: greenyellow;
+  }
+}
+.card[date-priority="high"] {
+  .badge {
+    background-color: black;
+    color: yellow;
+  }
+}
+.card[date-priority="urgent"] {
+  .badge {
+    background-color: black;
+    color: red;
+  }
+}
+
+.js-project-item.selected{
+  background-color: lightgray;
+  color: black;
+}

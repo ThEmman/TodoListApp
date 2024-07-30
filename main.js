@@ -5,6 +5,7 @@ import { allProjects, projectFunctions } from "./projectControllers.js";
 
 // HTML FUNCTIONS FOR EVENTS DYNAMIC UPDATING
 import htmlFunctions from "./htmlFunctions.js";
+import { allTodoList, todoFunctions } from "./todoControllers.js";
 
 let currentProjectDisplayed = "";
 let currentTodoDisplayed = [];
@@ -65,8 +66,15 @@ window.addEventListener("DOMContentLoaded", function () {
   projectFunctions.createProject("Another thing", []);
 
   // Fetch and display all projects
-  console.log(allProjects);
   htmlFunctions.renderProjectSidesBar(allProjects);
+
+  // Give them all click events
+  const allProjectBtn = projectsDisplay.querySelectorAll(".js-project-item");
+  for (let project of allProjectBtn) {
+    project.addEventListener("click", function (event) {
+      selectProjectOnClick(event, project.innerText);
+    });
+  }
 
   // Fetch and display all todo from default project
   currentProjectDisplayed = allProjects["default project"].name;
@@ -178,7 +186,7 @@ todoSubmitBtn.addEventListener("click", (e) => {
   // Validate due date and time
   const dateValue = date.value;
   const timeValue = time.value;
-  const dueDate = `${dateValue} ${timeValue}`;
+  const dueDate = `${dateValue} | ${timeValue}`;
 
   // Validate Priority
   if (!priorityValue) {
@@ -189,6 +197,26 @@ todoSubmitBtn.addEventListener("click", (e) => {
 
   // If the form is not valid don't submit it
   if (!isValid) return;
+
+  // Add todo to the project
+  const newTodo = todoFunctions.createTodoItem(
+    titleValue,
+    descriptionValue,
+    dueDate,
+    priorityValue,
+    projectAssignedTo.value
+  );
+
+  // Render todo list based on project assigned to
+  currentTodoDisplayed = allProjects["default project"].todoList;
+  htmlFunctions.renderProjectTodoList(
+    Event,
+    allProjects,
+    currentProjectDisplayed,
+    578
+  );
+
+  console.log(newTodo);
 
   todoForm.reset(); // Reset form input fields
   todoDialog.close(); // Close dialog
@@ -236,9 +264,48 @@ projectSubmitBtn.addEventListener("click", (e) => {
   // Check if form is valid
   if (!isValid) return;
 
+  // Create project and save to all projects object
+  projectFunctions.createProject(projectName, []);
+
+  // Render project side bar
+  htmlFunctions.renderProjectSidesBar(allProjects);
+
+  // Fire a loop to add project toggling event and display
+
   projectForm.reset(); // Reset form input fields
   projectDialog.close(); // Close dialog
 });
+
+function selectProjectOnClick(event, projectName) {
+  const projectClicked = event.target;
+
+  if (projectClicked.classList.contains("selected")) return;
+
+  // Deselect all projects
+  document
+    .querySelectorAll(".js-project-item")
+    .forEach((projectItem) => projectItem.classList.remove("selected"));
+
+  // Select clicked project
+  projectClicked.classList.add("selected");
+
+  // Update current project displayed indicator
+  const displayContainer = document.querySelector(".js-display-indicator");
+  displayContainer.innerText = projectName;
+
+  // Fetch and display all todo from default project
+  currentProjectDisplayed = allProjects[projectName].name;
+
+  // Render all todo for the default project
+  currentTodoDisplayed = allProjects[projectName].todoList;
+  console.log(currentTodoDisplayed);
+  htmlFunctions.renderProjectTodoList(
+    Event,
+    allProjects,
+    currentProjectDisplayed,
+    578
+  );
+}
 
 // TODO: Work on way to do form validation with e.preventDefault
 

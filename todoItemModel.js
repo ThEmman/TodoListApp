@@ -4,8 +4,8 @@ function createCard(
 ) {
   const Card =
     windowSize >= 576
-      ? `          <div class="col-12 col-sm-6 col-md-4 col-lg-3" data-id=${id}>
-            <div class="card mx-auto mx-md-0" style="width: 16rem">
+      ? `          <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+            <div class="card mx-auto mx-md-0" style="width: 16rem" data-id=${id} date-priority="${priority}">
               <input
                 type="checkbox"
                 name="taskDone"
@@ -32,7 +32,7 @@ function createCard(
                 ${description}
                 </p> -->
                 <span
-                  class="badge text-bg-secondary position-absolute top-0 end-0 mt-3 mx-2"
+                  class="badge position-absolute top-0 end-0 mt-3 mx-2"
                   >${priority}</span
                 >
               </div>
@@ -40,7 +40,7 @@ function createCard(
                 <button class="btn btn-outline-dark">DESCRIPTION</button>
               </div>
             </div>
-          </div>`
+          </div>` // TODO: Fix priority badge appearance when card displayed
       : `<div class="col-12 col-sm-6 col-md-4 col-lg-3">
             <div class="card mx-auto" style="width: 100%">
               <input
@@ -64,16 +64,14 @@ function createCard(
                   background-repeat: no-repeat;
                 "
               >
-                <h5 class="card-title">Card title</h5>
+                <h5 class="card-title">${title}</h5>
                 <p class="fst-italic card-text mb-0">
-                  EXPIRY DATE: <span>2024</span>
+                  EXPIRY DATE: <span>${dueDate}</span>
                 </p>
-                <span class="text-info">Project Assigned to: </span>
+                <span class="text-info">Project Assigned to: ${projectAssignedTo}</span>
                 <!-- <p class="card-text">
-                  Some quick example text to build on the card title and make up
-                  the bulk of the card's content.
+                  ${description}
                 </p> -->
-                <div class="badge"></div>
               </div>
               <div
                 class="card-footer d-flex w-100 align-items-center justify-content-between"
@@ -81,7 +79,7 @@ function createCard(
                 <button class="btn btn-outline-dark">DESCRIPTION</button>
                 <span
                   class="badge text-bg-secondary float-end align-items-center"
-                  >RED</span
+                  >${priority}</span
                 >
               </div>
             </div>

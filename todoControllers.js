@@ -12,7 +12,13 @@ title: "String"
  priority: "urgent" | "high" | "normal" | "low" 
  */
 // Object function
-function todoItem(title, description, dueDate, priority) {
+function todoItem(
+  title,
+  description,
+  dueDate,
+  priority,
+  projectAssignedTo = defaultProjectName
+) {
   // Closure variable for priority levels
   const priorityLevels = {
     1: "low",
@@ -22,12 +28,12 @@ function todoItem(title, description, dueDate, priority) {
   };
 
   this.id = projectUtilities.idGenerator(10); // Unique ID of 10 characters for each task item
-  this.projectAssignedTo = defaultProjectName;
 
   this.title = title;
   this.description = description;
   this.dueDate = dueDate;
   this.priority = priority;
+  this.projectAssignedTo = projectAssignedTo;
 
   this.setPriorityLevel = function (priorityLevel = 1) {
     this.priority = priorityLevels[priorityLevel];
@@ -68,15 +74,18 @@ function createTodoItem(
   title = "",
   description = "",
   dueDate = "yyyy/mm/dd",
-  priority = "normal"
+  priority = "normal",
+  projectAssignedTo = defaultProjectName
 ) {
   const newTodo = new todoItem(title, description, dueDate, priority);
   addToAllTodoList(newTodo);
   return newTodo;
 }
 
-createTodoItem("Harry Potter", "This is a description", "2005/02/21", "normal");
-createTodoItem("Harry Potter", "This is a description", "2005/02/21", "normal");
+createTodoItem("Harry Potter", "This is a description", "2005-02-21", "low");
+createTodoItem("Harry Potter", "This is a description", "2005-02-21", "normal");
+createTodoItem("Harry Potter", "This is a description", "2005-02-21", "high");
+createTodoItem("Harry Potter", "This is a description", "2005-02-21", "urgent");
 
 function deleteTodoItem(todoItem) {
   if (!projectUtilities.validateParameter(todoItem, "object")) return;
