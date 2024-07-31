@@ -102,6 +102,24 @@ window.addEventListener("DOMContentLoaded", function () {
   }
 
   // Add projects to the todo list forms
+  const projectSelectionInput = document.getElementById("project_selection"); // Get select input container
+
+  let projectOptions = `<option selected value= "default Project">Select Project to Assign to: </option> \n`;
+
+  for (let projectName in allProjects) {
+    projectOptions += `<option value="${projectName}">${projectName}</option> \n`;
+  }
+
+  projectSelectionInput.innerHTML = projectOptions;
+  {
+    /* <option selected value="default Project">
+              Select Project to Assign to:
+            </option>
+            <option value="1">One</option>
+            <!--JS generated list of projects-->
+            <option value="2">Two</option>
+            <option value="3">Three</option> */
+  }
 });
 
 /* const breakPoint = 576;
