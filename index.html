@@ -361,5 +361,19 @@
       crossorigin="anonymous"
     ></script>
     <script src="main.js" type="module"></script>
+    <script>
+      // Your JavaScript code here
+      // Click rotation function for cards
+      function cardRotation(event) {
+        const btnClicked = event.target;
+        const btnId = btnClicked.dataset.btnid;
+
+        // get flip card connected to btnId
+        const flipCard = document.querySelector(`div[data-id="${btnId}"]`);
+
+        // toggle the rotation
+        flipCard.classList.toggle("flipped"); // toggles the rotation of cards
+      }
+    </script>
   </body>
 </html>

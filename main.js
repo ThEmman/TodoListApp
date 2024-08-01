@@ -111,15 +111,6 @@ window.addEventListener("DOMContentLoaded", function () {
   }
 
   projectSelectionInput.innerHTML = projectOptions;
-  {
-    /* <option selected value="default Project">
-              Select Project to Assign to:
-            </option>
-            <option value="1">One</option>
-            <!--JS generated list of projects-->
-            <option value="2">Two</option>
-            <option value="3">Three</option> */
-  }
 });
 
 /* const breakPoint = 576;
@@ -324,6 +315,7 @@ function selectProjectOnClick(event, projectName) {
     578
   );
 }
+
 
 // TODO: Work on way to do form validation with e.preventDefault
 

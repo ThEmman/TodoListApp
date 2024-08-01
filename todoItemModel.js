@@ -5,7 +5,8 @@ function createCard(
   const Card =
     windowSize >= 576
       ? `          <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-            <div class="card mx-auto mx-md-0" style="width: 16rem" data-id=${id} date-priority="${priority}">
+      <div class="flip-card" data-id=${id}>
+            <div class="card mx-auto mx-md-0 css-todo-card-front" data-id=${id} date-priority="${priority}">
               <input
                 type="checkbox"
                 name="taskDone"
@@ -28,17 +29,24 @@ function createCard(
                   EXPIRY DATE: <span>${dueDate}</span>
                 </p>
                 <span class="text-info">Project Assigned to: ${projectAssignedTo}</span>
-                <!-- <p class="card-text">
-                ${description}
-                </p> -->
                 <span
                   class="badge position-absolute top-0 end-0 mt-3 mx-2"
                   >${priority}</span
                 >
               </div>
               <div class="card-footer">
-                <button class="btn btn-outline-dark">DESCRIPTION</button>
+                <button class="btn btn-outline-dark card-flip-btn" onclick=cardRotation(event) data-btnId=${id}>DESCRIPTION</button>
               </div>
+            </div>
+            <div class="card css-todo-card-back">
+              <h3 class=" card-header text-center">Description</h3>
+              <p class=" card-body">
+                ${description}
+              </p>
+              <div class="card-footer mx-auto">
+                <button class="btn btn-outline-dark card-flip-btn" data-btnId=${id} onclick=cardRotation(event)>TODO SUMMARY</button>
+              </div>
+            </div>
             </div>
           </div>` // TODO: Fix priority badge appearance when card displayed
       : `<div class="col-12 col-sm-6 col-md-4 col-lg-3">

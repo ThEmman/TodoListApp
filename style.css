@@ -28,7 +28,40 @@
   }
 }
 
-.js-project-item.selected{
+.js-project-item.selected {
   background-color: lightgray;
   color: black;
+}
+
+/* CARD ROTATION CODE FOR DESCRIPTION */
+div.col-12 {
+  perspective: 1000px;
+  background-color: transparent;
+}
+
+.flip-card {
+  width: 16rem;
+  position: relative;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+}
+
+.flip-card.flipped {
+  transform: rotateY(180deg);
+}
+
+.css-todo-card-front,
+.css-todo-card-back {
+  position: absolute;
+  width: 16rem;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+.css-todo-card-back {
+  align-self: center;
+  padding: 1rem;
+  transform: rotateY(180deg);
+  box-shadow: 0 0 16px 0 rgba(0, 0, 0, 0.2);
 }
