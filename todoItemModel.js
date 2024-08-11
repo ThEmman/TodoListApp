@@ -4,9 +4,9 @@ function createCard(
 ) {
   const Card =
     windowSize >= 576
-      ? `          <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+      ? `          <div class="card-container">
       <div class="flip-card" data-id=${id}>
-            <div class="card mx-auto mx-md-0 css-todo-card-front" data-id=${id} date-priority="${priority}">
+            <div class="card css-todo-card-front" data-id=${id} data-priority="${priority}">
               <input
                 type="checkbox"
                 name="taskDone"
@@ -18,6 +18,7 @@ function createCard(
                   transform: scale(1.5);
                 "
               />
+              <button class="btn p-0" style="position: absolute; left: 5px; top: 0;"><i class="bi bi-pencil text-danger"></i></button>
               <img
                 src="stockImage.jpg"
                 class="card-img-top"
@@ -40,7 +41,7 @@ function createCard(
             </div>
             <div class="card css-todo-card-back">
               <h3 class=" card-header text-center">Description</h3>
-              <p class=" card-body">
+              <p class="card-body">
                 ${description}
               </p>
               <div class="card-footer mx-auto">
@@ -48,9 +49,10 @@ function createCard(
               </div>
             </div>
             </div>
-          </div>` // TODO: Fix priority badge appearance when card displayed
-      : `<div class="col-12 col-sm-6 col-md-4 col-lg-3">
-            <div class="card mx-auto" style="width: 100%">
+          </div>` // TODO: Work on the tablet model cards to be same as laptop cards semantically
+      : `<div class="card-container">
+      <div class="flip-card" data-id=${id}>
+            <div class="card mx-auto css-todo-card-front" data-id=${id} data-priority="${priority}">
               <input
                 type="checkbox"
                 name="taskDone"
@@ -77,20 +79,27 @@ function createCard(
                   EXPIRY DATE: <span>${dueDate}</span>
                 </p>
                 <span class="text-info">Project Assigned to: ${projectAssignedTo}</span>
-                <!-- <p class="card-text">
-                  ${description}
-                </p> -->
               </div>
               <div
                 class="card-footer d-flex w-100 align-items-center justify-content-between"
               >
-                <button class="btn btn-outline-dark">DESCRIPTION</button>
+                <button class="btn btn-outline-dark card-flip-btn" onclick=cardRotation(event) data-btnId=${id}>DESCRIPTION</button>
                 <span
-                  class="badge text-bg-secondary float-end align-items-center"
+                  class="badge float-end align-items-center"
                   >${priority}</span
                 >
               </div>
             </div>
+            <div class="card css-todo-card-back">
+              <h3 class=" card-header text-center">Description</h3>
+              <p class="card-body">
+                ${description}
+              </p>
+              <div class="card-footer mx-auto">
+                <button class="btn btn-outline-dark card-flip-btn" data-btnId=${id} onclick=cardRotation(event)>TODO SUMMARY</button>
+              </div>
+            </div>
+          </div>
           </div>`;
 
   return Card;

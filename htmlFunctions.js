@@ -31,7 +31,7 @@ function renderTodoList(listOfTodo, windowWidth) {
     todoHTML += createCard(todo, windowWidth) + "\n";
   });
 
-  displayContainer.insertAdjacentHTML("beforeend", todoHTML);
+  displayContainer.innerHTML = todoHTML;
 }
 
 function renderProjectTodoList(
@@ -73,7 +73,7 @@ function renderProjectSidesBar(allProjects = {}) {
     allProjectString += createProjectBtn(allProjects[project]);
   }
 
-  projectBar.insertAdjacentHTML("beforeend", allProjectString);
+  projectBar.innerHTML = allProjectString;
 }
 
 const htmlFunctions = {

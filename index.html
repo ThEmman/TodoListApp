@@ -16,6 +16,8 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css"
     />
+
+    <!-- Custom CSS -->
     <link rel="stylesheet" href="style.css" />
     <style>
       .bi {
@@ -192,18 +194,7 @@
       <div
         class="list-group list-group-flush gap-3 text-center js-projects-display"
       >
-        <button
-          type="button"
-          class="list-group-item list-group-item-action text-bg-dark"
-        >
-          The current button
-        </button>
-        <button
-          type="button"
-          class="list-group-item list-group-item-action text-bg-dark"
-        >
-          The current button
-        </button>
+        <!-- Project to be injected by javascript -->
       </div>
     </div>
     <header class="mb-5 js-header">
@@ -263,93 +254,9 @@
           </button>
         </div>
         <div
-          class="row mx-0 px-1 pt-5 justify-content-start row-gap-3 js-all-cards-display"
+          class="d-flex justify-content-md-start justify-content-between row-gap-3 p-3 flex-wrap column-gap-md-5 js-all-cards-display"
         >
-          <!-- TABLET ABOVE CARD DESIGN -->
-          <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-            <div class="card mx-auto mx-md-0 shadow-lg" style="width: 16rem">
-              <input
-                type="checkbox"
-                name="taskDone"
-                id="taskDone"
-                style="
-                  position: absolute;
-                  right: 10px;
-                  top: 10px;
-                  transform: scale(1.5);
-                "
-              />
-              <img
-                src="stockImage.jpg"
-                class="card-img-top"
-                alt="Todo Item Image"
-              />
-              <div class="card-body position-relative">
-                <h5 class="card-title">Card title</h5>
-                <p class="fst-italic card-text mb-0">
-                  EXPIRY DATE: <span>2024</span>
-                </p>
-                <span class="text-info">Project Assigned to: </span>
-                <!-- <p class="card-text">
-                  Some quick example text to build on the card title and make up
-                  the bulk of the card's content.
-                </p> -->
-                <span
-                  class="badge text-bg-secondary position-absolute top-0 end-0 mt-3 mx-2"
-                  >RED</span
-                >
-              </div>
-              <div class="card-footer">
-                <button class="btn btn-outline-dark">DESCRIPTION</button>
-              </div>
-            </div>
-          </div>
-          <!-- TABLET BELOW CARD DESIGN -->
-          <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-            <div class="card mx-auto" style="width: 100%">
-              <input
-                type="checkbox"
-                name="taskDone"
-                id="taskDone"
-                style="
-                  position: absolute;
-                  right: 10px;
-                  top: 10px;
-                  transform: scale(1.5);
-                "
-              />
-
-              <div
-                class="card-body"
-                style="
-                  background: url(stockImage.jpg);
-                  color: white;
-                  background-size: cover;
-                  background-repeat: no-repeat;
-                "
-              >
-                <h5 class="card-title">Card title</h5>
-                <p class="fst-italic card-text mb-0">
-                  EXPIRY DATE: <span>2024</span>
-                </p>
-                <span class="text-info">Project Assigned to: </span>
-                <!-- <p class="card-text">
-                  Some quick example text to build on the card title and make up
-                  the bulk of the card's content.
-                </p> -->
-                <div class="badge"></div>
-              </div>
-              <div
-                class="card-footer d-flex w-100 align-items-center justify-content-between"
-              >
-                <button class="btn btn-outline-dark">DESCRIPTION</button>
-                <span
-                  class="badge text-bg-secondary float-end align-items-center"
-                  >RED</span
-                >
-              </div>
-            </div>
-          </div>
+          <!-- CARDS to be injected here -->
         </div>
       </div>
     </main>

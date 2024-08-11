@@ -77,15 +77,17 @@ function createTodoItem(
   priority = "normal",
   projectAssignedTo = defaultProjectName
 ) {
-  const newTodo = new todoItem(title, description, dueDate, priority);
-  addToAllTodoList(newTodo);
+  const newTodo = new todoItem(
+    title,
+    description,
+    dueDate,
+    priority,
+    projectAssignedTo
+  );
+  addToAllTodoList(newTodo); // For default project
+  newTodo.setProjectAssignedTo(projectAssignedTo); // To add todo item to project it was assigned to
   return newTodo;
 }
-
-createTodoItem("Harry Potter", "This is a description", "2005-02-21", "low");
-createTodoItem("Harry Potter", "This is a description", "2005-02-21", "normal");
-createTodoItem("Harry Potter", "This is a description", "2005-02-21", "high");
-createTodoItem("Harry Potter", "This is a description", "2005-02-21", "urgent");
 
 function deleteTodoItem(todoItem) {
   if (!projectUtilities.validateParameter(todoItem, "object")) return;

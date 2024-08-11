@@ -22,7 +22,6 @@ function idGenerator(lengthOfId = 8) {
     idGenerated += characterPool[randIndex];
   }
 
-  console.log(`Generated ${idGenerated}`);
   return idGenerated;
 }
 
