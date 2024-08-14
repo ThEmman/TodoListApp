@@ -171,94 +171,27 @@ function initializeTodoFormEvents() {
     todoDialog.close();
   });
 
-  todoSubmitBtn.addEventListener("click", (e) => {
-    e.preventDefault();
+  todoSubmitBtn.addEventListener("click", function (event) {
+    const submitType = event.target.classList.contains("edit-mode"); // True means edit mode
+    const cardToEditId = event.target.dataset.cardId; // the card to edit id alphanumeric
 
-    let isValid = true;
+    console.log(submitType, cardToEditId);
 
-    document
-      .querySelectorAll("p[class=inputError]")
-      .forEach((indicator) => (indicator.textContent = ""));
+    if (submitType && cardToEditId != "") {
+      todoCompleteFormFunction(event, "Edit", cardToEditId); // Function for editing the card clicked in the main section
 
-    const title = document.getElementById("todo_title");
-    const description = document.getElementById("todo_description");
-    const date = document.getElementById("due_date"); // Returns year-month-date // Min date is always todays date // Default date is always today
-    const time = document.getElementById("due_date_time"); // Returns time due to the set date; // Default time is always one hour ahead
-    let priorityValue = undefined;
-    document.querySelectorAll(".btn-check").forEach((checkBtn) => {
-      if (checkBtn.classList.contains("on")) {
-        priorityValue = checkBtn.dataset.priority;
-      }
-    }); // Return null if no priority selected
-    const projectAssignedTo = document.getElementById("project_selection"); // Returns "" if no project assigned to selected
+      // Negate changes to submit type and card being edited
+      todoForm
+        .querySelector('button[type="submit"]')
+        .classList.remove("edit-mode"); // Removes the mode which the btn is clicked upon
+      todoForm.querySelector('button[type="submit"]').dataset.cardId = ""; // Removes the card id to the submit button for easy access
 
-    // Validate title
-    let titleValue = title.value;
-    if (
-      titleValue.trim() === "" ||
-      (titleValue.length < title.minLength &&
-        titleValue.length > title.maxLength)
-    ) {
-      document.getElementById("titleError").textContent =
-        "Title is required and must be at least 6 characters but not more than 12 character";
-      isValid = false;
+      return;
     }
 
-    // Validate description
-    let descriptionValue = description.value;
-    if (
-      descriptionValue.trim() === "" ||
-      (descriptionValue.length < description.minLength &&
-        descriptionValue.length > description.maxLength)
-    ) {
-      document.getElementById("descriptionError").textContent =
-        "Description is required and must be at least 10 characters but not more than 150 character";
-      isValid = false;
-    }
-
-    // Validate due date and time
-    const dateValue = date.value;
-    const timeValue = time.value;
-    const dueDate = `${dateValue} ${timeValue}`;
-
-    // Validate Priority
-    if (!priorityValue) {
-      document.getElementById("priorityError").textContent =
-        "Priority is required";
-      isValid = false;
-    }
-
-    // If the form is not valid don't submit it
-    if (!isValid) return;
-
-    // Add todo to the project
-    const newTodo = todoFunctions.createTodoItem(
-      titleValue,
-      descriptionValue,
-      dueDate,
-      priorityValue,
-      projectAssignedTo.value
-    );
-    console.log(projectAssignedTo.value);
-
-    // Render todo list based on project assigned to
-    currentTodoDisplayed = allProjects[projectAssignedTo.value].todoList;
-
-    htmlFunctions.renderProjectTodoList(
-      Event,
-      allProjects,
-      currentProjectDisplayed,
-      window.innerWidth
-    );
-
-    console.log(newTodo);
-
-    todoForm.reset(); // Reset form input fields
-    todoDialog.close(); // Close dialog
+    todoCompleteFormFunction(event); // Function for adding new todo items to the html document
   });
 }
-
-initializeTodoFormEvents();
 
 //! PROJECT dialog controls and event handlers
 const projectDialog = document.getElementById("project-dialog");
@@ -375,7 +308,6 @@ function selectProjectOnClick(event, projectName) {
   );
 }
 
-// TODO: Make card shape change to display resizing
 // Re-render HTML elements if window size changes between 576px
 window.addEventListener("resize", function (e) {
   alterCardType(e); // Call function to re-render HTML card elements on window resize
@@ -388,7 +320,6 @@ function alterCardType(event) {
 
   // Re-render html with proper cards
   if (windowWidth < breakPoint) {
-    console.log("Re-rendering");
     htmlFunctions.renderProjectTodoList(
       Event,
       allProjects,
@@ -405,20 +336,151 @@ function alterCardType(event) {
   }
 }
 
-// Initialize editing ability for cards
+// Default cards to be displayed on screen
+todoFunctions.createTodoItem(
+  "Harry Potter",
+  "This is a description",
+  "2005-02-21",
+  "low"
+);
+todoFunctions.createTodoItem(
+  "Harry Potter",
+  "This is a description",
+  "2024-12-09",
+  "normal"
+);
 
-todoFunctions.createTodoItem(
-  "Harry Potter",
-  "This is a description",
-  "2005-02-21",
-  "low"
-);
-todoFunctions.createTodoItem(
-  "Harry Potter",
-  "This is a description",
-  "2005-02-21",
-  "low"
-);
+// TODO: Make editing the card possible with same dialog box
+
+// Function to show modal for todo dialog
+
+function formAddTodoItem() {
+  console.log("Form Add Todo");
+  document
+    .querySelectorAll("p[class=inputError]")
+    .forEach((indicator) => (indicator.textContent = ""));
+
+  const title = document.getElementById("todo_title");
+  const description = document.getElementById("todo_description"); // Returns the description
+  const date = document.getElementById("due_date"); // Returns year-month-date // Min date is always todays date // Default date is always today
+  const time = document.getElementById("due_date_time"); // Returns time due to the set date; // Default time is always one hour ahead
+  let priorityValue = undefined;
+  document.querySelectorAll(".btn-check").forEach((checkBtn) => {
+    if (checkBtn.classList.contains("on")) {
+      priorityValue = checkBtn.dataset.priority;
+    }
+  }); // Return null if no priority selected
+  const projectAssignedToValue = document
+    .getElementById("project_selection")
+    .value.toLowerCase(); // Returns "" if no project assigned to selected
+
+  const isValid = validateTodoFormInputs(title, description, priorityValue); // Check if form inputs are valid before submitting
+
+  // If the form is not valid don't submit it
+  if (!isValid) return;
+
+  // Validate due date and time
+  const dateValue = date.value;
+  const timeValue = time.value;
+  const dueDate = `${dateValue} ${timeValue}`;
+
+  /* console.log(
+    title,
+    description,
+    priorityValue,
+    dueDate,
+    projectAssignedToValue
+  ); */
+
+  // Add todo to the project
+  const newTodo = todoFunctions.createTodoItem(
+    title.value,
+    description.value,
+    dueDate,
+    priorityValue,
+    projectAssignedToValue
+  );
+
+  // Render todo list based on project assigned to
+  let projectAssignedTodoList = allProjects[projectAssignedToValue].todoList;
+
+  htmlFunctions.renderProjectTodoList(
+    Event,
+    allProjects,
+    currentProjectDisplayed,
+    window.innerWidth
+  );
+
+  console.log(newTodo);
+
+  todoForm.reset(); // Reset form input fields
+  todoDialog.close(); // Close dialog
+}
+
+function formEditTodoItem(editCardId) {
+  console.log("Form Edit Todo");
+
+  // TODO: CHECKPOINT - Get card values and put as placeholder for editing form input values
+}
+
+function validateTodoFormInputs(
+  title,
+  description,
+  priorityValue,
+  projectAssignedTo
+) {
+  let isValid = true;
+
+  // Validate title
+  let titleValue = title.value;
+  if (
+    titleValue.trim() === "" ||
+    (titleValue.length < title.minLength && titleValue.length > title.maxLength)
+  ) {
+    document.getElementById("titleError").textContent =
+      "Title is required and must be at least 6 characters but not more than 12 character";
+    isValid = false;
+  }
+
+  // Validate description
+  let descriptionValue = description.value;
+  if (
+    descriptionValue.trim() === "" ||
+    (descriptionValue.length < description.minLength &&
+      descriptionValue.length > description.maxLength)
+  ) {
+    document.getElementById("descriptionError").textContent =
+      "Description is required and must be at least 10 characters but not more than 150 character";
+    isValid = false;
+  }
+
+  // Validate Priority
+  if (!priorityValue) {
+    document.getElementById("priorityError").textContent =
+      "Priority is required";
+    isValid = false;
+  }
+
+  return isValid;
+}
+
+const todoCompleteFormFunction = (e, submitType = "Add", editCardId = "") => {
+  // submitType = "Add" | "Edit", editCardId = "" | "gdi48k";
+
+  // In case it is from an edit state or a add state
+  e.preventDefault();
+
+  // Check the type of submit (edit or add)
+  if (submitType === "Edit" && editCardId.length > 0) {
+    // Edit the todo item here
+    console.log("Trying to edit todo.....");
+    formEditTodoItem(editCardId);
+  } else if (submitType === "Add" && editCardId === "") {
+    formAddTodoItem();
+  }
+};
+initializeTodoFormEvents();
+
 /* createTodoItem("Harry Potter", "This is a description", "2005-02-21", "normal");
 createTodoItem("Harry Potter", "This is a description", "2005-02-21", "high");
 createTodoItem("Harry Potter", "This is a description", "2005-02-21", "urgent"); */

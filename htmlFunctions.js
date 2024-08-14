@@ -32,6 +32,30 @@ function renderTodoList(listOfTodo, windowWidth) {
   });
 
   displayContainer.innerHTML = todoHTML;
+
+  // Add edit button event for each card
+  try {
+    const allEditBtn = document.getElementsByClassName("card-edit-pencil");
+
+    for (let pencil of allEditBtn) {
+      pencil.addEventListener("click", function (event) {
+        const todoDialog = document.getElementById("todo-dialog");
+        const todoForm = todoDialog.getElementsByTagName("form")[0];
+
+        todoForm
+          .querySelector('button[type="submit"]')
+          .classList.add("edit-mode"); // Adds the mode which the btn is clicked upon
+        // TODO: Give the submit button a data-id attribute of the card being clicked - Also remove said attribute later on close/submit
+        todoForm.querySelector('button[type="submit"]').dataset.cardId =
+          pencil.dataset.id; // Adds the card id to the submit button for easy access
+
+        // Show todo modal
+        todoDialog.showModal();
+      });
+    }
+  } catch (error) {
+    console.error(error);
+  }
 }
 
 function renderProjectTodoList(

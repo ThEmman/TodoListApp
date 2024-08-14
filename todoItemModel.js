@@ -18,7 +18,7 @@ function createCard(
                   transform: scale(1.5);
                 "
               />
-              <button class="btn p-0" style="position: absolute; left: 5px; top: 0;"><i class="bi bi-pencil text-danger"></i></button>
+              <button class="btn p-0 card-edit-pencil" style="position: absolute; left: 5px; top: 0;" data-id=${id}><i class="bi bi-pencil text-danger"></i></button>
               <img
                 src="stockImage.jpg"
                 class="card-img-top"
@@ -49,7 +49,7 @@ function createCard(
               </div>
             </div>
             </div>
-          </div>` // TODO: Work on the tablet model cards to be same as laptop cards semantically
+          </div>`
       : `<div class="card-container">
       <div class="flip-card" data-id=${id}>
             <div class="card mx-auto css-todo-card-front" data-id=${id} data-priority="${priority}">
