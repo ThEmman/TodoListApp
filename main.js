@@ -97,13 +97,27 @@ window.addEventListener("DOMContentLoaded", function (e) {
   // Used
   function InitializeAllProjectBtnHandlerFunction() {
     // Give buttons click events at start of application
-    const allProjectBtn = projectsDisplay.querySelectorAll(".js-project-item");
+    const allProjectBtn = document.getElementsByClassName("js-project-item");
     for (let project of allProjectBtn) {
       project.addEventListener("click", function (event) {
-        selectProjectOnClick(event, project.innerText);
+        selectProjectOnClick(event);
       });
     }
+
+    // Initialize for default project heading button
+    /* (function () {
+      // Make project sidebar heading clickable
+      const projectSidebarHeading = document.querySelector(
+        "h2[value='default project']"
+      );
+
+      projectSidebarHeading.addEventListener("click", function (event) {
+        selectProjectOnClick(event, projectSidebarHeading);
+      });
+    })(); */
   }
+
+  //Used
 
   //Used
   function initializeDefaultTodoDisplayed(event) {
@@ -136,10 +150,12 @@ window.addEventListener("DOMContentLoaded", function (e) {
     // Add projects to the todo list forms
     const projectSelectionInput = document.getElementById("project_selection"); // Get select input container
 
-    let projectOptions = `<option selected value= "default Project">Select Project to Assign to: </option> \n`;
+    let projectOptions = `<option selected value= "default project">Select Project to Assign to: </option> \n`;
 
     for (let projectName in allProjects) {
-      projectOptions += `<option value="${projectName}">${projectName}</option> \n`;
+      if (projectName != "default project") {
+        projectOptions += `<option value="${projectName}">${projectName}</option> \n`;
+      }
     }
 
     projectSelectionInput.innerHTML = projectOptions;
@@ -162,10 +178,23 @@ function initializeTodoFormEvents() {
   });
 
   todoCloseBtn.addEventListener("click", (e) => {
+    const submitButton = todoForm.querySelector("#todo-submit");
+
     e.preventDefault();
     document
       .querySelectorAll("p[class=inputError]")
       .forEach((indicator) => (indicator.textContent = ""));
+
+    // Negate Edit status after closing the modal
+    const submitType = submitButton.classList.contains("edit-mode"); // True means edit mode
+    if (submitType) {
+      // Negate changes to submit type and card being edited
+
+      submitButton.classList.remove("edit-mode"); // Removes the mode which the btn is clicked upon
+      submitButton.dataset.cardId = ""; // Removes the card id to the submit button for easy access
+    }
+
+    console.log(submitButton);
 
     todoForm.reset();
     todoDialog.close();
@@ -175,16 +204,16 @@ function initializeTodoFormEvents() {
     const submitType = event.target.classList.contains("edit-mode"); // True means edit mode
     const cardToEditId = event.target.dataset.cardId; // the card to edit id alphanumeric
 
-    console.log(submitType, cardToEditId);
+    console.log(cardToEditId);
 
     if (submitType && cardToEditId != "") {
-      todoCompleteFormFunction(event, "Edit", cardToEditId); // Function for editing the card clicked in the main section
-
       // Negate changes to submit type and card being edited
       todoForm
         .querySelector('button[type="submit"]')
         .classList.remove("edit-mode"); // Removes the mode which the btn is clicked upon
       todoForm.querySelector('button[type="submit"]').dataset.cardId = ""; // Removes the card id to the submit button for easy access
+
+      todoCompleteFormFunction(event, "Edit", cardToEditId); // Function for editing the card clicked in the main section
 
       return;
     }
@@ -244,13 +273,15 @@ function initializeProjectFormEvents() {
     // Render project side bar
     htmlFunctions.renderProjectSidesBar(allProjects);
 
-    // Add projects to the todo list forms
+    // Add projects to the todo form selection list
     const projectSelectionInput = document.getElementById("project_selection"); // Get select input container
 
     let projectOptions = `<option selected value= "default Project">Select Project to Assign to: </option> \n`;
 
     for (let projectName in allProjects) {
-      projectOptions += `<option value="${projectName}">${projectName}</option> \n`;
+      if (projectName != "default project") {
+        projectOptions += `<option value="${projectName}">${projectName}</option> \n`;
+      }
     }
 
     projectSelectionInput.innerHTML = projectOptions;
@@ -260,7 +291,7 @@ function initializeProjectFormEvents() {
     const allProjectBtn = projectsDisplay.querySelectorAll(".js-project-item");
     for (let project of allProjectBtn) {
       project.addEventListener("click", function (event) {
-        selectProjectOnClick(event, project.innerText);
+        selectProjectOnClick(event, project);
       });
     }
 
@@ -271,11 +302,25 @@ function initializeProjectFormEvents() {
 
 initializeProjectFormEvents();
 
+/* 
+
+* Create edit button for the mobile todo - Make edit button work with mobile like desktop
+  TODO: Look into the edit button configurations
+* Make navbar sticky to the top of the page
+* Make toggle functionality for project work properly.
+* Looking into why the project is lower case in the frontend. Should be lower case for search purposes not displaying
+
+*/
+
 // On click function for project selection buttons
-function selectProjectOnClick(event, projectName) {
+function selectProjectOnClick(event) {
   const projectClicked = event.target;
+  console.log(projectClicked);
   const windowWidth = window.innerWidth;
 
+  const projectName = projectClicked.getAttribute("value")
+    ? projectClicked.getAttribute("value")
+    : projectClicked.innerText;
   // Selected = text-bg-light, Deselected = text-bg-dark
 
   if (projectClicked.classList.contains("text-bg-light")) return;
@@ -313,6 +358,7 @@ window.addEventListener("resize", function (e) {
   alterCardType(e); // Call function to re-render HTML card elements on window resize
 });
 
+// Function to re-render HTML elements on window resize
 function alterCardType(event) {
   const breakPoint = 576; // Breaking point for mobile and desktop cards
 
@@ -340,7 +386,7 @@ function alterCardType(event) {
 todoFunctions.createTodoItem(
   "Harry Potter",
   "This is a description",
-  "2005-02-21",
+  "2005-02-21 21:09",
   "low"
 );
 todoFunctions.createTodoItem(
@@ -421,6 +467,17 @@ function formEditTodoItem(editCardId) {
   console.log("Form Edit Todo");
 
   // TODO: CHECKPOINT - Get card values and put as placeholder for editing form input values
+  const currentCard = currentTodoDisplayed.find((ele) => ele.id === editCardId);
+  let cardEle;
+  document.querySelectorAll(".card").forEach((card) => {
+    if (card.dataset.id === currentCard.id) {
+      cardEle = card;
+    }
+  });
+
+  const cardTitle = cardEle.querySelector(".card-title").innerText;
+
+  console.log(currentCard, "\n", cardEle, "\n", cardTitle);
 }
 
 function validateTodoFormInputs(
@@ -472,7 +529,7 @@ const todoCompleteFormFunction = (e, submitType = "Add", editCardId = "") => {
 
   // Check the type of submit (edit or add)
   if (submitType === "Edit" && editCardId.length > 0) {
-    // Edit the todo item here
+    // Validate and Submit the Edited the todo item here
     console.log("Trying to edit todo.....");
     formEditTodoItem(editCardId);
   } else if (submitType === "Add" && editCardId === "") {

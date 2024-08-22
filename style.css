@@ -78,3 +78,14 @@
     width: 80%;
   }
 }
+
+h2[value="default project"] {
+  cursor: pointer;
+  padding: 1rem;
+  transition: border-color 0.2s ease;
+}
+
+h2[value="default project"]:hover {
+  border: 1px solid #ccc;
+  border-radius: 3px;
+}

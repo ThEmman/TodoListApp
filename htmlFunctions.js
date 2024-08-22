@@ -41,13 +41,63 @@ function renderTodoList(listOfTodo, windowWidth) {
       pencil.addEventListener("click", function (event) {
         const todoDialog = document.getElementById("todo-dialog");
         const todoForm = todoDialog.getElementsByTagName("form")[0];
+        const submitButton = todoForm.querySelector('button[type="submit"]');
 
-        todoForm
-          .querySelector('button[type="submit"]')
-          .classList.add("edit-mode"); // Adds the mode which the btn is clicked upon
-        // TODO: Give the submit button a data-id attribute of the card being clicked - Also remove said attribute later on close/submit
-        todoForm.querySelector('button[type="submit"]').dataset.cardId =
-          pencil.dataset.id; // Adds the card id to the submit button for easy access
+        submitButton.classList.add("edit-mode"); // Adds the mode which the btn is clicked upon
+        //! Also remove said attribute later on close/submit
+        submitButton.dataset.cardId = pencil.dataset.id; // Adds the card id to the submit button for easy access
+
+        console.log(submitButton);
+
+        // Populate form with card information as placeholder values before showing modal
+        let cardEle;
+        document.querySelectorAll(".flip-card").forEach((card) => {
+          if (card.dataset.id === pencil.dataset.id) {
+            cardEle = card;
+          }
+        });
+
+        todoDialog.querySelector("#todo_title").value =
+          cardEle.querySelector(".card-title").innerText;
+
+        todoDialog.querySelector("#todo_description").value =
+          cardEle.querySelector(".css-todo-card-back .card-body").innerText;
+
+        let dueDateAndTimeSplit = cardEle
+          .querySelector(".css-todo-card-front .due-date-and-time")
+          .innerText.split(" ");
+        todoDialog.querySelector("#due_date").value = dueDateAndTimeSplit[0];
+        todoDialog.querySelector("#due_date_time").value =
+          dueDateAndTimeSplit[1] ? dueDateAndTimeSplit[1] : "00:00";
+
+        const cardPriority = cardEle.querySelector(".badge").innerText;
+        todoDialog.querySelectorAll("input[name=priority").forEach((radio) => {
+          radio.classList.remove("on");
+
+          if (cardPriority == radio.dataset.priority) {
+            radio.classList.toggle("on");
+            radio.checked = true; // Select the radio button
+          }
+        });
+
+        const selectInput = todoDialog.querySelector("select");
+        const projectAssignedToValue = cardEle
+          .querySelector(".project-assigned-to")
+          .innerText.split(":")[1]
+          .trim();
+        console.log(projectAssignedToValue);
+        selectInput.querySelectorAll("option").forEach((option) => {
+          option.removeAttribute("selected");
+          // option.selected = false;
+
+          if (option.value == projectAssignedToValue) {
+            option.setAttribute("selected", true);
+            // option.selected = true;
+            console.log(option);
+          }
+        });
+
+        // TODO: First make select project input auto fill && Then work on submitting to edit card details and reflect on backend arrays
 
         // Show todo modal
         todoDialog.showModal();
@@ -94,7 +144,10 @@ function renderProjectSidesBar(allProjects = {}) {
 
   // Loop through each project and create HTML for i
   for (const project in allProjects) {
-    allProjectString += createProjectBtn(allProjects[project]);
+    // project = project name string
+    if (project != "default project") {
+      allProjectString += createProjectBtn(allProjects[project]);
+    }
   }
 
   projectBar.innerHTML = allProjectString;
